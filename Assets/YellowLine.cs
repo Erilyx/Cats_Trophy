@@ -21,13 +21,11 @@ public class YellowLine : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+
+    public void SetLineHeight(float newLineHeight)
     {
-        if (collision.gameObject.CompareTag("Cat"))
-        {
-            //lineRiser += 0.01f;
-            transform.position = new Vector3(0, collision.transform.position.y + lineRiser, 0);
-        }
+        transform.position = new Vector3(0, newLineHeight, 0);
     }
 
 }
