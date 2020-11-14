@@ -64,6 +64,8 @@ public class Cat_Controller : MonoBehaviour
     private void FixedUpdate()
     {
 
+        /*  // I learned about effectors and I think this is what I can use!!!
+         *  
         if ((Mathf.Abs(spin) > spinMin) && (!isTryingToBalance))
         {
             ComBalancing();
@@ -88,7 +90,6 @@ public class Cat_Controller : MonoBehaviour
             com = startingCom;
             isTryingToBalance = false;
         }*/
-
 
     }
 
