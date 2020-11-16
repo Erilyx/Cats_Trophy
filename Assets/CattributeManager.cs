@@ -13,12 +13,10 @@ public class CattributeManager : MonoBehaviour
     public float Weight;
     public float Gravity;
     public float AngularDrag;
-    public float comX;
-    public float comY;
 
     [Header("COM Adjust")]
     public LayerMask groundLayer;
-    public bool isLeftLanding, isRightLanding, isCenterLanding, isAdjusting = false;
+    public bool isLeftLanding, isRightLanding, isAdjusting = false;
     public Vector3 rayOffset;
     public Vector3 perCatColliderAlignment;
     public float groundLength;
@@ -30,8 +28,6 @@ public class CattributeManager : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         makeClickableScript = GetComponent<MakeClickable>();
         catSprite = GetComponent<SpriteRenderer>();
-        
-
     }
 
     // Update is called once per frame
@@ -40,20 +36,16 @@ public class CattributeManager : MonoBehaviour
         rb.mass = Weight;
         rb.gravityScale = Gravity;
         rb.angularDrag = AngularDrag;
-        comX = rb.centerOfMass.x;
-        comY = rb.centerOfMass.y;
-
 
         isLeftLanding = Physics2D.Raycast(transform.position + perCatColliderAlignment - rayOffset, Vector2.down, groundLength, groundLayer);
         isRightLanding = Physics2D.Raycast(transform.position + perCatColliderAlignment + rayOffset, Vector2.down, groundLength, groundLayer);
-        isCenterLanding = Physics2D.Raycast(transform.position + perCatColliderAlignment, Vector2.down, groundLength, groundLayer);
-
+  
         if(makeClickableScript.wasJustReleased == true && isAdjusting == false)
         {
-            if (isCenterLanding || isLeftLanding || isRightLanding)
+            if (isLeftLanding || isRightLanding)
             {
                 isAdjusting = true;
-                SenseLanding();
+                //do I need this ?   SenseLanding();
             }
         }
     }
@@ -66,21 +58,21 @@ public class CattributeManager : MonoBehaviour
 
     public void SenseLanding()
     {
-        if (isCenterLanding == false)
+
+        if (isLeftLanding == false)
         {
-            if (isLeftLanding == false)
-            {
-                //left and center are both missing, shift weight to the right
-                Vector3 comAdjust = new Vector3((rb.centerOfMass.x + rayOffset.x) * 0.8f, rb.centerOfMass.y - (catSprite.size.y * 0.4f), 0);
-                rb.centerOfMass = comAdjust;
-            }
-
-
-            if (isRightLanding == false)
-            {
-
-            }
+            //left and center are both missing, shift weight to the right
+            Vector3 comAdjust = new Vector3((rb.centerOfMass.x + rayOffset.x) * 0.8f, rb.centerOfMass.y - (catSprite.size.y * 0.4f), 0);
+            rb.centerOfMass = comAdjust;
         }
+
+
+        if (isRightLanding == false)
+        {
+            Vector3 comAdjust = new Vector3((rb.centerOfMass.x - rayOffset.x) * 0.8f, rb.centerOfMass.y - (catSprite.size.y * 0.4f), 0);
+            rb.centerOfMass = comAdjust;
+        }
+        
 
     }
 
@@ -92,7 +84,6 @@ public class CattributeManager : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position + perCatColliderAlignment, transform.position + perCatColliderAlignment + Vector3.down * groundLength);
         Gizmos.DrawLine(transform.position + perCatColliderAlignment + rayOffset, transform.position + perCatColliderAlignment + rayOffset + (Vector3.down * groundLength));
         Gizmos.DrawLine(transform.position + perCatColliderAlignment - rayOffset, transform.position + perCatColliderAlignment - rayOffset + (Vector3.down * groundLength));
 
