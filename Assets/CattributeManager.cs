@@ -45,7 +45,7 @@ public class CattributeManager : MonoBehaviour
             if (isLeftLanding || isRightLanding)
             {
                 isAdjusting = true;
-                //do I need this ?   SenseLanding();
+                SenseLanding();  //do I need this ?   
             }
         }
     }
